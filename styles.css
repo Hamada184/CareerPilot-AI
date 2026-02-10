@@ -246,24 +246,54 @@ ul {
   margin-bottom: 20px;
 }
 
-.prompt {
+.features {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.feature-card {
   background: #0f172a;
   color: #e2e8f0;
-  padding: 24px;
-  border-radius: 20px;
-  max-width: 900px;
-  margin: 0 auto;
-  position: relative;
+  padding: 22px;
+  border-radius: 18px;
+  display: grid;
+  gap: 12px;
+  min-height: 200px;
 }
 
-.prompt pre {
-  white-space: pre-wrap;
-  font-family: "Cairo", sans-serif;
-  font-size: 0.95rem;
+.feature-card p {
+  color: #cbd5f5;
 }
 
-.prompt .btn {
-  margin-top: 16px;
+.feature-card .usage {
+  font-size: 0.85rem;
+  color: #facc15;
+}
+
+.feature-card .btn {
+  justify-self: start;
+}
+
+.feature-card.is-active {
+  outline: 2px solid #2bb673;
+  box-shadow: 0 12px 30px rgba(43, 182, 115, 0.35);
+}
+
+.payment {
+  background: white;
+  padding: 26px;
+  border-radius: 18px;
+  display: grid;
+  gap: 18px;
+  align-items: center;
+  box-shadow: 0 14px 30px rgba(18, 24, 38, 0.08);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.payment__status {
+  font-weight: 600;
+  color: #2bb673;
 }
 
 .footer {
