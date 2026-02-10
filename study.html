@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CareerPilot Feature</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body data-feature="study">
+    <main class="section">
+      <div class="feature-page">
+        <a class="back-link" href="index.html#features">← رجوع للصفحة الرئيسية</a>
+        <h1 data-feature-title>Feature</h1>
+        <p class="feature-status" data-status></p>
+
+        <div data-locked hidden class="locked-box">
+          <h3>انتهت المحاولة المجانية</h3>
+          <p>لاستخدام هذه الميزة مرة أخرى، اشترك في Premium لتفعيل محاولات لا نهائية.</p>
+          <a class="btn btn--primary" href="index.html#payment">اذهب للدفع الآن</a>
+        </div>
+
+        <section data-workspace class="workspace">
+          <label for="feature-input">جرب الميزة الآن:</label>
+          <textarea id="feature-input" data-input rows="6"></textarea>
+          <div class="workspace__actions">
+            <button class="btn btn--secondary" type="button" data-run>تشغيل التحليل</button>
+            <button class="btn btn--primary" type="button" data-finish>إنهاء الجلسة</button>
+          </div>
+          <div class="result-box" data-result>النتيجة ستظهر هنا بعد الضغط على تشغيل التحليل.</div>
+        </section>
+      </div>
+    </main>
+
+    <script src="feature.js"></script>
+  </body>
+</html>
