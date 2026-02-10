@@ -201,6 +201,21 @@
         </div>
       </section>
 
+      <section id="account" class="section">
+        <div class="section__header">
+          <h2>حالة حسابك</h2>
+          <p>تابع محاولاتك المتبقية أو فعّل الاشتراك المميز.</p>
+        </div>
+        <div class="account-panel">
+          <p class="account-badge" data-account-badge>Free Plan</p>
+          <p data-account-summary>لم تبدأ أي محاولات بعد.</p>
+          <div class="account-actions">
+            <button class="btn btn--ghost" type="button" data-reset-usage>إعادة ضبط التجربة</button>
+            <a class="btn btn--primary" href="#payment">ترقية إلى Premium</a>
+          </div>
+        </div>
+      </section>
+
       <section id="features" class="section section--alt">
         <div class="section__header">
           <h2>تجربة المنصة (نسخة ديناميكية)</h2>
@@ -274,9 +289,29 @@
               اصطناعي متقدم.
             </p>
           </div>
-          <button class="btn btn--primary" type="button" data-pay>
-            تأكيد الدفع
-          </button>
+          <form class="payment-form" data-payment-form>
+            <label>
+              الاسم على البطاقة
+              <input type="text" name="holder" placeholder="Mohamed Ali" required />
+            </label>
+            <label>
+              رقم البطاقة
+              <input type="text" name="card" inputmode="numeric" placeholder="4242 4242 4242 4242" required />
+            </label>
+            <div class="payment-form__row">
+              <label>
+                MM/YY
+                <input type="text" name="expiry" placeholder="12/29" required />
+              </label>
+              <label>
+                CVV
+                <input type="password" name="cvv" inputmode="numeric" placeholder="123" required />
+              </label>
+            </div>
+            <button class="btn btn--primary" type="submit" data-pay>
+              تأكيد الدفع
+            </button>
+          </form>
           <span class="payment__status">جاهز للدفع.</span>
         </div>
       </section>

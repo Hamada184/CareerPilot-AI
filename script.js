@@ -1,19 +1,24 @@
 const navToggle = document.querySelector('.nav__toggle');
 const navLinks = document.querySelector('.nav__links');
 const planButtons = document.querySelectorAll('[data-plan]');
-const payButton = document.querySelector('[data-pay]');
+const paymentForm = document.querySelector('[data-payment-form]');
 const paymentStatus = document.querySelector('.payment__status');
 const featureCards = document.querySelectorAll('[data-feature]');
+const resetUsageButton = document.querySelector('[data-reset-usage]');
+const accountBadge = document.querySelector('[data-account-badge]');
+const accountSummary = document.querySelector('[data-account-summary]');
 
 const STORAGE_KEY = 'careerpilot-state';
 const FREE_LIMIT = 1;
+const FEATURES = ['interview', 'cv', 'study', 'freelance', 'profile', 'jobs'];
 
 const getState = () => {
   const saved = localStorage.getItem(STORAGE_KEY);
   const parsed = saved ? JSON.parse(saved) : {};
   return {
     paid: Boolean(parsed.paid),
-    usage: parsed.usage || {}
+    usage: parsed.usage || {},
+    history: parsed.history || []
   };
 };
 
@@ -26,6 +31,23 @@ const remainingTries = (feature) => {
   if (state.paid) return Infinity;
   const used = state.usage[feature] || 0;
   return Math.max(FREE_LIMIT - used, 0);
+};
+
+const updateAccountPanel = () => {
+  if (!accountBadge || !accountSummary) return;
+
+  const state = getState();
+  if (state.paid) {
+    accountBadge.textContent = 'Premium Plan';
+    accountBadge.classList.add('account-badge--premium');
+    accountSummary.textContent = 'كل المميزات مفتوحة الآن بمحاولات لا نهائية.';
+    return;
+  }
+
+  const remainingTotal = FEATURES.reduce((acc, feature) => acc + remainingTries(feature), 0);
+  accountBadge.textContent = 'Free Plan';
+  accountBadge.classList.remove('account-badge--premium');
+  accountSummary.textContent = `متبقي لك ${remainingTotal} محاولات مجانية إجماليًا (${FEATURES.length} ميزات × محاولة واحدة).`;
 };
 
 if (navToggle && navLinks) {
@@ -80,17 +102,52 @@ planButtons.forEach((button) => {
   });
 });
 
-if (payButton && paymentStatus) {
-  payButton.addEventListener('click', () => {
+const validCardNumber = (value) => value.replace(/\s+/g, '').length >= 16;
+const validExpiry = (value) => /^\d{2}\/\d{2}$/.test(value.trim());
+const validCvv = (value) => /^\d{3,4}$/.test(value.trim());
+
+if (paymentForm && paymentStatus) {
+  paymentForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(paymentForm);
+    const holder = String(formData.get('holder') || '').trim();
+    const card = String(formData.get('card') || '').trim();
+    const expiry = String(formData.get('expiry') || '').trim();
+    const cvv = String(formData.get('cvv') || '').trim();
+
+    if (!holder || !validCardNumber(card) || !validExpiry(expiry) || !validCvv(cvv)) {
+      paymentStatus.textContent = '❌ بيانات الدفع غير مكتملة. تأكد من الاسم/رقم البطاقة/MM/YY/CVV.';
+      paymentStatus.classList.add('payment__status--error');
+      return;
+    }
+
     const state = getState();
     state.paid = true;
     saveState(state);
-    paymentStatus.textContent = 'تم الدفع بنجاح ✅ تم تفعيل محاولات لا نهائية لكل المميزات.';
+
+    paymentStatus.textContent = '✅ تم الدفع بنجاح. تم فتح محاولات لا نهائية لكل المميزات.';
+    paymentStatus.classList.remove('payment__status--error');
     featureCards.forEach(updateCardState);
+    updateAccountPanel();
+    paymentForm.reset();
   });
 }
 
-// initial payment state UI
+if (resetUsageButton) {
+  resetUsageButton.addEventListener('click', () => {
+    localStorage.removeItem(STORAGE_KEY);
+    featureCards.forEach(updateCardState);
+    updateAccountPanel();
+    if (paymentStatus) {
+      paymentStatus.textContent = 'تمت إعادة ضبط التجربة بنجاح.';
+      paymentStatus.classList.remove('payment__status--error');
+    }
+  });
+}
+
 if (paymentStatus && getState().paid) {
   paymentStatus.textContent = '✅ أنت مشترك بالفعل: كل المميزات بمحاولات لا نهائية.';
 }
+
+updateAccountPanel();
